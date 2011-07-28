@@ -1,0 +1,409 @@
+body {
+  background: #f1f5f6;
+  color: #505050;
+  font-family: Arial, san-serif;
+  font-size: 12px;
+  margin: 0; /*2px*/
+  width: 322px;
+  text-shadow: #ffffff 0 1px 1px; 
+  padding: 0;
+}
+
+/*--links--*/
+  a {
+    text-decoration: none;
+  }
+  a:hover {
+    text-decoration: underline;
+  }
+
+/*--header--*/
+  header {
+    background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#d2d6d7), to(#d3d4d6));
+    box-shadow: 0 1px 0 0 #ffffff;
+    border-radius: 2px 2px 0 0;
+    margin: 0;
+    padding: 4px 0;
+    text-align: center;
+  }
+  header > a {
+    color: #595a5c;
+    font-weight: bold;
+  }
+
+/*--content--*/
+  #content {
+    margin: 8px;
+  }
+
+/*--player--*/
+  #player {
+    height: 100px;
+    margin: 0 1px;
+  }
+  #player_tools {
+    width: 96px;
+    float: left;
+  }
+  #player_tools > .border {
+    background: #d2d6d7;
+    border-radius: 5px;
+    box-shadow: 0 1px 0 0 #ffffff;
+    width: 97px;
+  }
+  #player_button_border {
+    height: 70px;
+  }
+  #player_button {
+    background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#f5f5f5), to(#e7e8e9));
+    border-radius: 3px;
+    border: 1px solid #8d8e90;
+    box-shadow: 0 1px 0 0 #c4c5c7, inset 0 1px 0 0 #ffffff;
+    cursor: pointer;
+    float: left;
+    height: 40px;
+    margin: 14px;
+    width: 68px;
+  }
+  #player_button:hover {
+    background: -webkit-gradient(linear, 0 0, 0 100%, from(#eee), to(#fff));
+  }
+  #player_button:active {
+    background: -webkit-gradient(linear, 0 0, 0 100%, from(#ddd), to(#eee));
+    box-shadow: 0 1px 0 0 #ffffff, inset 0 1px 0 0 #c4c5c7;
+  }
+  #player_button::after {
+    content: "";
+    background: url('/images/play.png') 0 0 no-repeat;
+    height: 14px;
+    width: 14px;
+    display: block;
+    margin: 13px 28px;
+  }
+  #player_button:hover::after { opacity: 0.8; }
+  #player_button.playing::after {
+    background-position: 0 100%;
+  }
+  #player_button:active::after {
+    background-position: 100% 0;
+  }
+  #player_button.playing:active::after {
+    background-position: 100% 100%;
+  }
+  #player_volume {
+    height: 24px;
+    margin-top: 6px;
+  }
+  #player_volume > #player_volume_range {
+    -webkit-appearance: none;
+    background: #dcdddf;
+    border: 1px solid #808485;
+    border-radius: 3px;
+    border-top: 1px solid #616264;
+    box-shadow: 0 1px 0 0 #f9fafc, inset 0 1px 0 0 #c7cbcc;
+    cursor: pointer;
+    height: 4px;
+    margin: 9px 0 0 14px;
+    width: 68px;
+  }
+  #player_volume > #player_volume_range::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#e8e8e8), to(#c3c3c3));
+    border: 1px solid #a3a3a3;
+    border-radius: 10px;
+    box-shadow: inset 0 1px 1px 0 #ffffff;
+    height: 15px;
+    width: 15px;
+  }
+  #player_volume > #player_volume_range::-webkit-slider-thumb:hover {
+    background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#eee), to(#ccc));
+  }
+  #player_volume > #player_volume_range::-webkit-slider-thumb:active {
+    background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#ddd), to(#eee));
+    box-shadow: inset 0 -1px 1px 0 #ffffff;
+  }
+
+/*--player_content--*/
+  #player_content {
+    float: left;
+    margin-left: 17px;
+    width: 191px;
+  }
+  #player_station a  {
+    color: #505050;
+    font-size: 15px;
+    font-weight: bold;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  #player_info {
+    margin-top: 6px;
+    width: 100%;
+  }
+  #player_links {
+    height: 35px;
+  }
+  #player_links #player_pic {
+    float: left;
+    margin-right: 20px;
+    height: 35px;
+    width: 35px;
+  }
+  #player_links #player_pic img {
+    border-radius: 5px;
+    box-shadow: 0 0 5px 0 #aaa;
+  }
+  #player_track {
+    font-size: 16px;
+    margin: 6px 0 2px 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    width: 100%;
+  }
+  #player_artist {
+    font-size: 14px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    width: 100%;
+  }
+  #player_options {
+    float: left;
+    margin-top: 5px; 
+  }
+  #player_options > a {
+    cursor: pointer;
+    float: left;
+    height: 23px;
+    width: 24px;
+    background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#e7e7e9), to(#efeff1));
+    border: 1px solid #bbb;
+    border-left: none;
+  }
+  #player_options > a:first-child, #player_options > .disabled + a {
+    border-top-left-radius: 5px;
+    border-bottom-left-radius: 5px;
+    border-left: 1px solid #bbb;
+  }
+  #player_options > .disabled + a { margin-left: 25px; }
+  #player_options > a:last-child {
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px;
+  }
+  #player_options > a::after {
+    content: "";
+    background: url('/images/links.png') 0 0 no-repeat;
+    height: 20px;
+    width: 20px;
+    display: block;
+    margin: 2px;
+  }
+  #player_options > #to_fav::after { background-position: 0 100%; }
+  #player_options > #to_fav.active::after { background-position: -40px 100%; }
+  #player_options > #to_fav.disabled::after { background-position: -20px 100%; }
+  #player_options > #share_f::after { background-position: -20px 0; }
+  #player_options > #share_g::after { background-position: -40px 0; }
+  #player_options > #share_v::after { background-position: 100% 0; }
+  #player_options > :hover {
+    background: -webkit-gradient(linear, 0 0, 0 100%, from(#ddd), to(#fff));
+  }
+  #player_options > *:hover::after { opacity: 0.8;}
+  #player_options > .disabled:hover {
+    background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#e7e7e9), to(#efeff1));
+  }
+  #player_options > .disabled { display: none; }
+
+/*--stations--*/
+  #stations_container {
+    height: 352px;
+    margin-top: 10px;
+  }
+  #stations {
+    border: 1px solid #b1b3b2;
+    border-radius: 5px;
+    min-height: 350px;
+    width: 100%;
+  }
+  .stations {
+    border-radius: 5px;
+    list-style-type: none;
+    margin: 0;
+    max-height: 350px;
+    overflow: auto;
+    padding: 0;
+  }
+  .stations >  .item {
+    font-size: 15px;
+    border-bottom: 1px solid #d7d7d7;
+    border-top: 1px solid #ffffff;
+    cursor: pointer;
+    padding: 6px 16px;
+  }
+  .stations > .item:last-child {
+    border-bottom: none;
+  }
+  .stations > .item > span {
+    display: block;
+    font-size: 12px;
+    margin: 0px 0 0 0;
+  }
+  .stations > .item > a {
+    top: -5px;
+    display: none;
+    position: relative;
+    float: right;
+    height: 10px;
+  }
+  .stations > .item > a::after {
+    background: url('/images/links.png') 0 100% no-repeat;
+    content: '';
+    display: block;
+    height: 20px;
+    width: 20px;
+  }
+  .stations > .item > a.link::after { background-position: 100% 100%; }
+  .stations > .item > a.like.active::after { background-position: -40px 100%; }
+  .stations > .item > a:hover::after { opacity: 0.7; }
+  .stations > .item:hover {
+    background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#dedede), to(#f6f6f6));
+    border-top: 1px solid #f9f9f9;
+  }
+  .stations > .item:hover > a.disabled { display: none; }
+  .stations > .item:hover > a {
+    display: block;
+  }
+  .stations > .table, .stations > .last {
+    float: left;
+  }
+  .stations > .table {
+    padding: 10px 20px;
+    height: 25px;
+    width: 62px;
+    overflow: hidden;
+  }
+  .stations > .table:hover {
+    background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#dedede), color-stop(20%, #dedede), to(#f6f6f6));
+  }
+  .stations > .table > div {
+    text-align: center;
+    font-size: 12px;
+    margin-top: -4px;
+    height: 32px;
+    overflow: hidden;
+  }
+  .stations > .one {
+    padding: 10px 122px;
+  }
+  .stations > .two {
+    padding: 10px 45px 10px 46px;
+  }
+  .stations > .last {
+    width: 100%;
+  }
+
+/*--scrollbar--*/
+  .stations::-webkit-scrollbar {
+    display: none;
+  }
+  #scroll {
+    float: right;
+    height: 352px;
+    margin-right: -1px;
+    margin-top: -352px;
+    overflow-x: hidden;
+    overflow-y: auto;
+    width: 14px;
+    opacity: 0.7;
+  }
+  #scroll.hide { display: none; }
+  #scroll::-webkit-scrollbar {
+    border-radius: 5px;
+    width: 14px;
+  }
+  #scroll::-webkit-scrollbar-button {
+    background: transparent;
+    height: 6px;
+  }
+  #scroll::-webkit-scrollbar-thumb {
+    border-radius: 7px / 24px;
+    background: -webkit-gradient(linear, 0 0, 100% 0, from(transparent), 
+      color-stop(29%, transparent),
+      color-stop(30%, #acacac),
+      color-stop(50%, #b3b3b3),
+      color-stop(70%, #acacac),
+      color-stop(71%, transparent),
+      to(transparent)
+    );
+  }
+  #scroll:hover::-webkit-scrollbar-thumb {
+    background: -webkit-gradient(linear, 0 0, 100% 0, from(transparent), 
+      color-stop(29%, transparent),
+      color-stop(30%, #b3b3b3),
+      color-stop(50%, #bababa),
+      color-stop(70%, #b3b3b3),
+      color-stop(71%, transparent),
+      to(transparent)
+    );
+  }
+
+/*--view--*/
+  #menu { height: 31px; }
+  .menu {
+    float: left;
+    color: #828282;
+    height: 25px;
+    margin-top: 7px;
+  }
+  .menu > * {
+    background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#e7e7e9), to(#efeff1));
+    border: 1px solid #b1b3b2;
+    cursor: pointer;
+    float: right;
+    height: 23px;
+    padding: 0 8px;
+    margin-left:-1px;
+  }
+  .menu > *:last-child {
+    border-top-left-radius: 5px;
+    border-bottom-left-radius: 5px;
+    margin-left: 0;
+  }
+  .menu > *:first-child, .menu > .disabled + div {
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px;
+  }
+  .menu span {
+    top: 4px;
+    position: relative;
+  }
+  .menu > .active { 
+    color: #232323; 
+  }
+  .menu > :hover {
+    background: -webkit-gradient(linear, 0 0, 0 100%, from(#ddd), to(#fff));
+  }
+  .menu > ::after {
+    content: "";
+    top: 4px;
+    position: relative;
+  }
+  .menu > #sort_1::after { content: "Popular"; }
+  .menu > #sort_2::after { content: "ABC"; }
+  .menu > #sort_3::after { content: "Order"; }
+  .menu > #sort_4::after { content: "Favorites"; }
+  #view { float: right}
+  #view > *::after {
+    background: url('/images/view.png') 0 100% no-repeat;
+    content: '';
+    display: block;
+    height: 12px;
+    width: 13px;
+    margin: 2px 0;
+  }
+  #view > #view_1::after { background-position: 100% 100%; }
+  #view > #view_0.active::after { background-position: 0 0; }
+  #view > #view_1.active::after { background-position: 100% 0; }
+  .menu > *:hover::after { opacity: 0.8;}
+  .menu > .disabled { display: none; }

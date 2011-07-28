@@ -1,0 +1,6 @@
+todo:
+
+features:
+  + notifications
+  + favorite stations
+  + keyboard shortcuts

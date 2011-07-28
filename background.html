@@ -1,0 +1,20 @@
+<!DOCTYPE HTML>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <script type="text/javascript" charset="utf-8" src="js/lib/tmpl.js"></script>
+    <script type="text/javascript" charset="utf-8" src="js/lib/Storage.js"></script>
+    <script type="text/javascript" charset="utf-8" src="js/lib/Cookies.js"></script>
+    <script type="text/javascript" charset="utf-8" src="js/FrodioAPI.js"></script>
+    <script type="text/javascript" charset="utf-8" src="js/background.js"></script>
+    
+    <script type="text/html" id="radio">
+      <object type="application/x-shockwave-flash" data="other/fladio.swf" id="swfradio" height="0" width="0">
+        <param name="flashvars" value="volume=<%=volume%>&amp;stream=<%=stream%>" />
+      </object>
+    </script>
+
+  </head>
+  <body onload="backgroundOnLoad();">
+  </body>
+</html>
