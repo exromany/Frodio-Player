@@ -3,6 +3,7 @@
   <head>
     <meta charset="utf-8">
     <link rel="stylesheet" type="text/css" charset="utf-8" href="css/options.css"/>
+    <script type="text/javascript" charset="utf-8" src="js/lib/Cookies.js"></script>
     <title>Frodio Player Settings</title>
     <script type="text/javascript" charset="utf-8">
       function onLoad() {
@@ -14,6 +15,7 @@
         // on change
         scrobble.onchange = function() {
           main.storage.set('scrobble', this.checked);
+          if (main.played) setCookie('paused', this.checked ? '0' : '1');
           main.opt_scrobble = this.checked;
         }
         notification.onchange = function() {
