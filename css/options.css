@@ -40,6 +40,7 @@ h1 {
 } 
 #options:after {content: "__MSG_options__";}
 #keys:after {content: "__MSG_keys__";}
+#problem:after {content: "__MSG_problem__";}
 input {
   float: right;
   margin-left: -20px; 
@@ -59,26 +60,50 @@ p {
   height: 20px;
   padding: 0 10px;
 }
+p:last-child {
+  margin-bottom: 0;
+}
 #shortcut_play:after {content: "__MSG_play__";}
 #shortcut_stop:after {content: "__MSG_stop__";}
 #shortcut_random:after {content: "__MSG_random__";}
 a {
   float: right;
-  padding-left: 10px;
 }
 a.del:after {content:"__MSG_del__";}
-a.edit:after {content:"__MSG_edit__";}
-a:hover {text-decoration: underline;}
-span { 
-  color: #828282;
-  float: right;
-  text-align: center;
-  width: 220px;
+a.after:after, a.edit {
+  border-radius: 10px;
+  padding: 3px 8px 5px 8px;
 }
-span.empty:after { content: "__MSG_empty__"; }
+a.after:hover:after, a.edit:hover {
+  background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#d2d6d7), to(#d3d4d6));
+  box-shadow: inset 0 -1px 0 0 #fdfeff;
+  opacity: 0.9;
+  text-shadow: #f9fafc 0 1px 1px;
+}
+a.after:active:after {
+  background: #cacdce;
+}
+a.edit { 
+  color: #727272;
+  float: right;
+  margin: -3px 0 -5px 0;
+  text-align: center;
+  width: 260px;
+}
+a.empty:after { content: "__MSG_empty__"; }
 .note {
-  color: #888;
+  color: #828282;
   font-size: 12px;
+  height: 32px;
 }
 .note:after {content: "__MSG_note__";}
+a#resetStations:after {content: "__MSG_resetStations__";}
+a#resetAll:after {content: "__MSG_resetAll__";}
+a.reset { 
+  display: block;
+  padding: 0;
+  text-align: center; 
+  width: 50%;
+}
 .hidden { display: none;}
+

@@ -22,13 +22,17 @@
   "press_key": {        "message": "Нажмите клавишу..." },
   "options": {          "message": "Настройки" },
   "keys": {             "message": "Горячие клавиши *" },
+  "problem": {          "message": "Сбростиь настройки" },
+  "resetAll": {         "message": "Сбросить все настройки" },
+  "resetStations": {    "message": "Сбросить список станций" },
+  "doneResetStations": {"message": "Список станций сброшен" },
+  "doneResetAll": {     "message": "Все настройки сброшены" },
   "scrobble": {         "message": "Скробблить прослушанные треки" },
   "notification": {     "message": "Показывать уведомления с названиями композиций" },
   "seconds": {          "message": "Продолжительность показа уведомлений (в секундах)" },
   "play": {             "message": "Воспроизвести" },
   "stop": {             "message": "Остановить" },
   "del": {              "message": "удалить" },
-  "edit": {             "message": "назначить" },
   "empty": {            "message": "не назначена" },
   "note": {             "message": "* Горячие клавиши не работают : на служебных страницах Chrome, в Chrome Web Store, внутри элементов iframe." }
 }

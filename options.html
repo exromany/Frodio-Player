@@ -3,7 +3,6 @@
   <head>
     <meta charset="utf-8">
     <link rel="stylesheet" type="text/css" charset="utf-8" href="css/options.css"/>
-    <script type="text/javascript" charset="utf-8" src="js/lib/Cookies.js"></script>
     <title>Frodio Player Settings</title>
     <script type="text/javascript" charset="utf-8">
       function onLoad() {
@@ -15,7 +14,7 @@
         // on change
         scrobble.onchange = function() {
           main.storage.set('scrobble', this.checked);
-          if (main.played) setCookie('paused', this.checked ? '0' : '1');
+          if (main.played) main.cookie.set('paused', this.checked ? '0' : '1');
           main.opt_scrobble = this.checked;
         }
         notification.onchange = function() {
@@ -53,9 +52,9 @@
           current_id = id;
           document.onkeydown = getShortcut;
           document.onkeyup = arguments.callee;
-          shortcuts[id].children[2].className = "";
+          shortcuts[id].children[1].className = "edit";
         }
-        shortcuts[id].children[2].innerText = chrome.i18n.getMessage('press_key');
+        shortcuts[id].children[1].innerText = chrome.i18n.getMessage('press_key');
       }
       function del(id) {
         delKeyListenter();
@@ -87,7 +86,7 @@
           setShortcut(current_id);
           return;
         }
-        shortcuts[current_id].children[2].innerText = mod + (key ? key : '');
+        shortcuts[current_id].children[1].innerText = mod + (key ? key : '');
         return false;
       }
       function keyName(code) {
@@ -97,8 +96,8 @@
       }
       function setShortcut(id) {
         if (main.shortcuts[id] == null) {
-          shortcuts[id].children[2].className = "empty";
-          shortcuts[id].children[2].innerText = "";
+          shortcuts[id].children[1].className = "edit empty";
+          shortcuts[id].children[1].innerText = "";
         } else {
           var key = '';
           if (main.shortcuts[id].alt) key += 'Alt + ';
@@ -106,8 +105,8 @@
           if (main.shortcuts[id].meta) key += 'Meta + ';
           if (main.shortcuts[id].shift) key += 'Shift + ';
           key += keyName(main.shortcuts[id].code);
-          shortcuts[id].children[2].className = "";
-          shortcuts[id].children[2].innerText = key;
+          shortcuts[id].children[1].className = "edit";
+          shortcuts[id].children[1].innerText = key;
         }
       }
       function shortcuts_equivalent(id1, id2){
@@ -117,6 +116,21 @@
           main.shortcuts[id1].meta == main.shortcuts[id2].meta &&
           main.shortcuts[id1].shift == main.shortcuts[id2].shift &&
           main.shortcuts[id1].code == main.shortcuts[id2].code;
+      }
+      function resetStations() {
+        main.stop();
+        main.storage.clear('stations');
+        main.storage.clear('order');
+        main.storage.clear('station');
+        main.init();
+        main.customNotify('','', chrome.i18n.getMessage('doneResetStations'));
+      }
+      function resetAll() {
+        main.stop();
+        main.storage.clearAll();
+        main.init();
+        main.customNotify('','', chrome.i18n.getMessage('doneResetAll'));
+        location.reload();
       }
     </script>
     
@@ -141,15 +155,20 @@
       </p>
       <h1 id="keys"></h1>
       <p id="shortcut_play">
-        <a class="del" onclick="del(0);"></a><a class="edit" onclick="edit(0);"></a><span class="empty"></span>
+        <a class="del after" onclick="del(0);"></a><a class="edit empty" onclick="edit(0);"></a>
       </p>
       <p id="shortcut_stop">
-        <a class="del" onclick="del(1);"></a><a class="edit" onclick="edit(1);"></a><span class="empty"></span>
+        <a class="del after" onclick="del(1);"></a><a class="edit empty" onclick="edit(1);"></a>
       </p>
       <p id="shortcut_random">
-        <a class="del" onclick="del(2);"></a><a class="edit" onclick="edit(2);"></a><span class="empty"></span>
+        <a class="del after" onclick="del(2);"></a><a class="edit empty" onclick="edit(2);"></a>
       </p>
       <p class="note">
+      </p>
+      <h1 id="problem"></h1>
+      <p>
+        <a id="resetAll" class="reset after" onclick="resetAll();"></a>
+        <a id="resetStations" class="reset after" onclick="resetStations();"></a>
       </p>
     </div>
   </body>

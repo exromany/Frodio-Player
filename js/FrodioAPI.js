@@ -84,10 +84,8 @@ FrodioAPI.prototype.getStations = function (forceUpdate, callback) {
         temp[key] = true;
         if (!this.stations[key] || this.stations[key].removed || !this.loaded) {
           this.hasNew = true;
-          if (!this.stations[key]) {
-            this.order.push(key-0);
+          if (!this.stations[key]) 
             this.stations[key] = {};
-          }
           var re = new RegExp("^Liked "+
             (json[key].track.title+'').replace(this.escRE, "\\$1")+" by "+
             (json[key].artist.name+'').replace(this.escRE, "\\$1")+" on (.*)$");
@@ -116,11 +114,14 @@ FrodioAPI.prototype.getStations = function (forceUpdate, callback) {
         this.getInfo(key, json[key], forceUpdate);
       }
       // проверим, нет ли отключенных станций
+      this.order = [];
       for (var key in this.stations) {
         if (!temp[key]) {
           this.stations[key].removed = true;
-          this.order.splice(this.order.indexOf(key-0), 1);
+          //if (this.order.indexOf(key-0) >= 0) this.order.splice(this.order.indexOf(key-0), 1);
           this.hasNew = true;
+        } else {
+          this.order.push(key-0);
         }
       }
       this.loaded = true;

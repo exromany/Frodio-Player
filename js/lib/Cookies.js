@@ -1,15 +1,20 @@
-function setCookie(name, value, expDate) {
-  var details = {'url'   : api.protocol + api.host + '/',
+function Cookie(api) {
+  _api = api;
+}
+
+Cookie.prototype.set = function (name, value, expDate) {
+  var details = {'url'   : _api.protocol + _api.host + '/',
                  'name'  : name,
                  'value' : value,
-                 'domain': '.'+api.host,
+                 'domain': '.'+_api.host,
                  'path'  : '/'};
   if (expDate) details.expirationDate = expDate;
   chrome.cookies.set(details);
 }
 
-function getCookie(name, callback) {
-  var details = {'url' : api.protocol + api.host + '/',
+Cookie.prototype.get = function (name, callback) {
+  console.log(_api);
+  var details = {'url' : _api.protocol + _api.host + '/',
                  'name': name};
   chrome.cookies.get(details, function(cookie) {
     callback.call(this, cookie ? cookie.value : null);

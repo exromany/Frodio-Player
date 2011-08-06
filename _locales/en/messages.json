@@ -22,13 +22,17 @@
   "press_key": {        "message": "Press a key..." },
   "options": {          "message": "Settings" },
   "keys": {             "message": "Shortcuts *" },
+  "problem": {          "message": "Reset settings" },
+  "resetAll": {         "message": "Reset all settings" },
+  "resetStations": {    "message": "Reset the list of stations" },
+  "doneResetStations": {"message": "The list of stations had been reset" },
+  "doneResetAll": {     "message": "All settings had been reset" },
   "scrobble": {         "message": "Scrobbling tracks" },
   "notification": {     "message": "Show notifications with the names of songs" },
   "seconds": {          "message": "Duration of display notifications (in seconds)" },
   "play": {             "message": "Play" },
   "stop": {             "message": "Stop" },
   "del": {              "message": "del" },
-  "edit": {             "message": "edit" },
   "empty": {            "message": "empty" },
   "note": {             "message": "* Shortcuts do not work: on the service pages of Chrome, in the Chrome Web Store, inside a iframe." }
 }
