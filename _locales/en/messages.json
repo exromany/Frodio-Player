@@ -1,38 +1,50 @@
 {
-  "desc": {             "message": "Listen to internet radio from Frodio.com" },
-  "goto_site": {        "message": "Go to $1 home page" },
-  "sort_by_popular": {  "message": "Sort by popularity" },
-  "sort_by_abc": {      "message": "Sort alphabetically" },
-  "sort_by_order": {    "message": "Sort by order" },
-  "sort_by_fav": {      "message": "Show favorite stations only" },
-  "view_like_list": {   "message": "Display stations as a list" },
-  "view_like_table": {  "message": "Display stations as a table" },
-  "goto_track": {       "message": "Go to composition page" },
-  "goto_station": {     "message": "Go to station page" },
-  "share": {            "message": "Share to $1" },
-  "like": {             "message": "Like" },
-  "unlike": {           "message": "Unlike" },
-  "like_station": {     "message": "Like station" },
-  "unlike_station": {   "message": "Unlike station" },
-  "random": {           "message": "Random station" },
-  "random_text": {      "message": "Randomly select a station (any from $1)" },
-  "station_removed": {  "message": "Station off" },
-  "connecting": {       "message": "Getting data from $1" },
-  "cant_connect": {     "message": "Can't connect to $1" },
-  "press_key": {        "message": "Press a key..." },
-  "options": {          "message": "Settings" },
-  "keys": {             "message": "Shortcuts *" },
-  "problem": {          "message": "Reset settings" },
-  "resetAll": {         "message": "Reset all settings" },
-  "resetStations": {    "message": "Reset the list of stations" },
-  "doneResetStations": {"message": "The list of stations had been reset" },
-  "doneResetAll": {     "message": "All settings had been reset" },
-  "scrobble": {         "message": "Scrobbling tracks" },
-  "notification": {     "message": "Show notifications with the names of songs" },
-  "seconds": {          "message": "Duration of display notifications (in seconds)" },
-  "play": {             "message": "Play" },
-  "stop": {             "message": "Stop" },
-  "del": {              "message": "del" },
-  "empty": {            "message": "empty" },
-  "note": {             "message": "* Shortcuts do not work: on the service pages of Chrome, in the Chrome Web Store, inside a iframe." }
+  "desc": {
+    "message": "Listen to internet radio from Frodio.com"
+  },
+  "goto_site": {
+    "message": "Go to $1 home page"
+  },
+  "open_in_tab": {
+    "message": "Open this extension in tab"
+  },
+  "sort_by_popular": {
+    "message": "Sort by popularity"
+  },
+  "sort_by_abc": {
+    "message": "Sort alphabetically"
+  },
+  "sort_by_order": {
+    "message": "Sort by order"
+  },
+  "view_like_list": {
+    "message": "Display stations as a list"
+  },
+  "view_like_table": {
+    "message": "Display stations as a table"
+  },
+  "goto_track": {
+    "message": "Go to composition page"
+  },
+  "goto_station": {
+    "message": "Go to station page"
+  },
+  "share": {
+    "message": "Share to $1"
+  },
+  "like": {
+    "message": "Like"
+  },
+  "unlike": {
+    "message": "Unlike"
+  },
+  "open": {
+    "message": "Open"
+  },
+  "random": {
+    "message": "Random station"
+  },
+  "random_text": {
+    "message": "Randomly select a station (any from $1)"
+  }
 }

@@ -1,0 +1,74 @@
+body {
+  background: #f2f5f6;
+}
+
+a {
+  color: #A52A2A;
+}
+
+header, header > a {
+  color: #2F4F4F;
+}
+
+ul.stations > li > .item {
+  color: #483D8B;
+  border-color: #fff;
+}
+
+ul.stations > li > .item:hover {
+  background-color: #e2f5ff;
+  border-color: #e0e0e0;
+}
+
+ul.stations > li > .item > span.track {
+  color: #708090;
+}
+
+ul.stations > li > .item > .link {
+  color: #CD5C5C;
+}
+
+#player {
+  background: url(/images/player_bg2.png) 0 0 no-repeat;
+}
+
+#player_links a#player_pic img {
+  box-shadow: 0 0 5px 0 gray;
+}
+#player_track {
+  color: #708090;
+}
+#player_artist {
+  color: #778899;
+}
+
+#player_options, 
+.menu,
+div#stations {
+  border-color: #d0d0d0;
+}
+
+#player_options > .rounded_right,
+.menu > div.center, .menu > div.right {
+  border-left-color: #d0d0d0;
+}
+
+#player_options > .option_button > a,
+.menu, 
+ul.stations > li > .item,
+div#stations {
+  background-color: #fff;
+}
+
+#player_options > .option_button > a:hover,
+.menu > div:hover {
+  background-color: #eee;
+}
+
+.menu {
+  color: #708090;
+}
+
+.menu > div.active {
+  color: #000;
+}

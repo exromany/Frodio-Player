@@ -6,196 +6,158 @@ function FrodioAPI () {
   this.escRE = /([\(\)\[\]\\\.\^\$\|\?\+\*])/g;
   this.hasNew = true;
   this.stations = {};
-  this.current = 1;
   this.order = [];
-  this.loaded = false; // получен ли хоть раз список станций
-  this.user = false;
-}
-
-FrodioAPI.prototype.count = function (fav) {
-  if (fav) {
-    var count = 0;
-    for (var i = 0; i < this.order.length; i++) {
-      count += this.stations[this.order[i]].fav ? 1 : 0;
-    }
-    return count;
-  } else return this.order.length;
-}
-
-FrodioAPI.prototype.random = function () {
-  var count = this.count();
-  if (count > 1) {
-    var r;
-    do {
-      r = Math.floor(Math.random() * count);
-      r = this.order[r];
-    } while (r == this.current)
-    return r;
-  }  
-}
-
-FrodioAPI.prototype.sort = function(opt) {
-var stations = this.stations;
-  this.order.sort(function(a, b){
-    var c;
-    switch (opt) { 
-      case 1: // по популярности
-        c = stations[b].listener - stations[a].listener;
-        if (c != 0) break;
-      case 2: // по алфавиту
-        c = (stations[a].name < stations[b].name) ? -1 : 1;
-        break;
-      default: // по порядку
-        c = a - b;
-    }
+  this.count = function () {
+    var c = 0;
+    for (var key in this.stations)
+      c += 1;
     return c;
-  });
+  }
+  this.random = function (current) {
+    var count = this.count();
+    if (count > 1) {
+      var r;
+      do {
+        r = Math.floor(Math.random() * count) + 1;
+        var i = 0;
+        for (var key in this.stations) {
+          if (++i == r) {
+            r = key;
+            break;
+          }
+        }
+      } while (r == current)
+      return r;
+    }  
+  }
+  this.sort = function(opt) {
+    var stations = this.stations;
+    this.order.sort(function(a, b){
+      var c;
+      switch (opt) { 
+        case 1: // по популярности
+          c = stations[b].listener - stations[a].listener;
+          if (c != 0) break;
+        case 2: // по алфавиту
+          c = (stations[a].name < stations[b].name) ? -1 : 1;
+          break;
+        default: // по порядку
+          c = a - b;
+      }
+      return c;
+    });
+  }
 }
 
 FrodioAPI.prototype.ajax = function(url, param, callback) {
   var xhr = new XMLHttpRequest();
   var self = this;
   var method = "GET";
-  var opt = {};
+  var opt = false;
+  var opt2 = false;
   if (param) {
     method = param.method || method;
     opt = param.opt || opt;
+    opt2 = param.opt2 || opt2;
   }
   xhr.open(method, url, true);
   xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
+  xhr.timeout = 1000*2;
   xhr.send(null);
-  xhr.onload = function() {
-    if (callback) 
-      callback.call(self, xhr, opt);
+  xhr.onload = function (e) {
+    if (callback) {
+      callback.call(self, xhr, opt, opt2);
+    }
   }
   xhr.onerror = function() {
-    if (callback) 
-      callback.call(self, xhr, opt);
+    //alert('error on xhr'); // todo: надо что то сделать с этим
   }
 }
 
-FrodioAPI.prototype.getStations = function (forceUpdate, callback) {
+FrodioAPI.prototype.getStations = function (currentId, forceUpdate, callback) {
   this.ajax( this.protocol + this.host + this.onair + "?all=1", null, function (xhr){
     if (xhr && xhr.status == 200) {
+      //document.body.innerHTML = xhr.responseText;
       var json = JSON.parse(xhr.responseText);
       this.hasNew = false;
       var temp = {};
       for (var key in json) {
         temp[key] = true;
-        if (!this.stations[key] || this.stations[key].removed || !this.loaded) {
+        if (!this.stations[key]) {
+          this.stations[key] = {};
+          this.order.push(key-0);
           this.hasNew = true;
-          if (!this.stations[key]) 
-            this.stations[key] = {};
           var re = new RegExp("^Liked "+
             (json[key].track.title+'').replace(this.escRE, "\\$1")+" by "+
             (json[key].artist.name+'').replace(this.escRE, "\\$1")+" on (.*)$");
           this.stations[key].name = json[key].like.text.replace(re, "$1");
           this.stations[key].link = json[key].link.replace(/^http:\/\/(.*)\.frodio\.com.*/, "$1");
-          this.stations[key].removed = false;
+          this.ajax(this.protocol + this.host + '/s/' + this.stations[key].link + '/logo_small.png', {'opt':key}, function(xhr, key){
+            if (xhr.status == 200) {
+              this.stations[key].img = 'png';
+              this.hasNewLogo = true;
+            } else {
+              this.ajax(this.protocol + this.host + '/s/' + this.stations[key].link + '/logo_small.gif', {'opt':key}, function(xhr, key){
+                if (xhr.status == 200) {
+                  this.stations[key].img = 'gif';
+                  this.hasNewLogo = true;
+                }
+              })
+            }
+          });
         }
-        this.getInfo(key, json[key], forceUpdate);
+        if (this.stations[key].id != json[key].id || forceUpdate || this.stations[key].toUpdate) {
+          this.stations[key].id         = json[key].id;
+          this.stations[key].updated    = true;
+          this.stations[key].toUpdate   = false;
+          this.stations[key].track      = json[key].track.title;
+          this.stations[key].track_link = json[key].link;
+          this.stations[key].track_pic  = json[key].artist.img;
+          this.stations[key].artist     = json[key].artist.name;
+          this.stations[key].like_link  = json[key].like.link;
+          this.stations[key].listener   = json[key].listener;
+          this.stations[key].urls       = json[key].urls;
+          if (key == currentId) {
+            this.ajax( this.protocol + this.stations[key].link + '.' + this.host + this.stations[key].like_link, 
+                {'opt': key, 'opt2':this.stations[key].id}, function(xhr, key, id) {
+              if (xhr && xhr.status == 200 && id == this.stations[key].id) {
+                var json_like = JSON.parse(xhr.responseText);
+                this.stations[key].liked = (json_like.like) ? true : false;
+                this.stations[key].updated = true;
+              }
+            });
+          }
+        }
       }
       // проверим, нет ли отключенных станций
-      this.order = [];
       for (var key in this.stations) {
         if (!temp[key]) {
-          this.stations[key].removed = true;
+          delete this.stations[key];
+          this.order.splice(this.order.indexOf(key-0), 1);
           this.hasNew = true;
-        } else {
-          this.order.push(key-0);
         }
       }
-      this.loaded = true;
-      this.error = false;
-    } else {
-      this.error = true;
+
+      callback.call(this);
     }
-    if (callback) callback.call(this);
   })
 }
 
-FrodioAPI.prototype.getInfo = function (key, json, forceUpdate) {
-  if (this.stations[key].id != json.id || forceUpdate || this.stations[key].toUpdate) {
-    this.stations[key].id         = json.id;
-    this.stations[key].updated    = true;
-    this.stations[key].toUpdate   = false;
-    this.stations[key].track      = json.track.title;
-    this.stations[key].track_link = json.link;
-    this.stations[key].track_pic  = json.artist.img;
-    this.stations[key].artist     = json.artist.name;
-    this.stations[key].like_link  = json.like.link;
-    this.stations[key].listener   = json.listener;
-    this.stations[key].urls       = json.urls;
-    // get liked
-    if (this.user && key == this.current) {
-      this.ajax( this.protocol + this.stations[key].link + '.' + this.host + this.stations[key].like_link, 
-          {'opt': {'key':key, 'id':this.stations[key].id} }, function(xhr, opt) {
-        if (xhr && xhr.status == 200 && opt.id == this.stations[opt.key].id) {
-          var json_like = JSON.parse(xhr.responseText);
-          this.stations[opt.key].liked = (json_like.like) ? true : false;
-          this.stations[opt.key].updated = true;
-        }
-      });
-    }
-    // end get liked
-    // get favorites stations
-    if (this.user) {
-      this.ajax( this.protocol + this.host + '/station/' + this.stations[key].link + '/like', 
-          {'opt': {'key':key} }, function(xhr, opt) {
-        if (xhr && xhr.status == 200) {
-          var json_like = JSON.parse(xhr.responseText);
-          var tmp = (json_like.like) ? true : false;
-          if (this.stations[opt.key].fav != tmp) {
-            this.stations[opt.key].fav = tmp;
-            this.stations[opt.key].updated = true;
-          }
-        }
-      });
-    }
-    // end get favorites stations
-  }
+FrodioAPI.prototype.updateOnAir = function (key) {
+  this.ajax( this.protocol + this.stations[key].link + '.' + this.host + this.onair );
 }
 
-FrodioAPI.prototype.updateOnAir = function (callback) {
-  this.ajax( this.protocol + this.stations[this.current].link + '.' + this.host + this.onair, {'opt':{'key':this.current} }, function (xhr, opt) {
-    if (xhr && xhr.status == 200) {
-      var json = JSON.parse(xhr.responseText);
-      var id = this.stations[this.current].id;
-      this.getInfo(opt.key, json);
-      if (id != this.stations[this.current].id && callback)
-        callback.call(this);
-    }
-  });
-}
-
-FrodioAPI.prototype.setLike = function (callback) {
-  this.ajax( this.protocol + this.stations[this.current].link + '.' + this.host + this.stations[this.current].like_link, 
-      {'method':'POST', 'opt': {'key':this.current, 'id':this.stations[this.current].id} }, function(xhr, opt){
+FrodioAPI.prototype.setLike = function (key, callback) {
+  this.ajax( this.protocol + this.stations[key].link + '.' + this.host + this.stations[key].like_link, 
+      {'method':'POST', 'opt':key, 'opt2':this.stations[key].id}, function(xhr, key, id){
     if (xhr.status == 200) {
-      if (opt.id == this.stations[opt.key].id) {
+      if (id == this.stations[key].id) {
         var json = JSON.parse(xhr.responseText);
         if (json.ok) {
-          this.stations[opt.key].liked = (json.sign == '+');
-          this.stations[opt.key].updated = true;
+          this.stations[key].liked = (json.sign == '+');
+          this.stations[key].updated = true;
           callback.call(this);
         }
-      }
-    }
-  } );
-}
-
-FrodioAPI.prototype.setLikeStation = function (key, callback) {
-  this.ajax( this.protocol + this.host + '/station/' + this.stations[key].link + '/like', 
-      {'method':'POST', 'opt': {'key':key }}, function(xhr, opt){
-    if (xhr.status == 200) {
-        var json = JSON.parse(xhr.responseText);
-        if (json.ok) {
-          var tmp = (json.sign == '+');
-          if (tmp != this.stations[opt.key].fav) {
-            this.stations[opt.key].fav = tmp;
-            this.stations[opt.key].updated = true;
-          }
-        callback.call(this);
       }
     }
   } );

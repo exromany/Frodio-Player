@@ -1,6 +1,4 @@
 todo:
-
-features:
-  + notifications
-  + favorite stations
-  + keyboard shortcuts
+  1. Горячие клавиши
+  2. взаимодействие с открытой вкладкой сайта frodio.com
+  --- version 2.0 --- 
