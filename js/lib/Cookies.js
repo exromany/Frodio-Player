@@ -13,7 +13,6 @@ Cookie.prototype.set = function (name, value, expDate) {
 }
 
 Cookie.prototype.get = function (name, callback) {
-  console.log(_api);
   var details = {'url' : _api.protocol + _api.host + '/',
                  'name': name};
   chrome.cookies.get(details, function(cookie) {

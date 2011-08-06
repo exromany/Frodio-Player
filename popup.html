@@ -26,16 +26,8 @@
 
     <script type="text/html" id="table_station">
       <div class="item table <%=class%>" <%=events%> title="<%=title%><%= track ? '\n'+track : '' %>" id="t_station_<%=link%>">
-        <%=img%>
+        <img src="<%=img%>" width="62" height="25" <%=error%> />
       </div>
-    </script>
-
-    <script type="text/html" id="table_station_img">
-      <img src="<%=img%>" width="62" height="25" alt=""/>
-    </script>
-
-    <script type="text/html" id="table_station_text">
-      <div><%=title%></div>
     </script>
 
     <script type="text/html" id="options">
@@ -113,7 +105,7 @@
         <a href="http://frodio.com/" target="_blank" title="<%= chrome.i18n.getMessage('goto_site', 'Frodio.com') %>">
           Frodio - Social Radio System
         </a>
-        <a href="" target="_blank">#</a>
+        <!--<a href="" target="_blank">#</a>-->
       </header>
       <div id="content">
         <%=body_inner%> 

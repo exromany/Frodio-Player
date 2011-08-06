@@ -90,13 +90,8 @@ function setList() {
           'events': 'onclick="stationClick('+key+', event);"',
           'active': (this.user && this.loaded) ? this.stations[key].fav ? 'active' : '' : 'disabled',
           'class': i >= this.count(main.sort == 4) - last ? last == 1 ? 'one' : 'two' : '',
-          'img': this.stations[key].img ? 
-            tmpl('table_station_img', {
-              'img': 'http://frodio.com/s/'+this.stations[key].link+'/logo_small.'+this.stations[key].img 
-            }) : 
-            tmpl('table_station_text', {
-              'title': this.stations[key].name
-            })
+          'img': 'http://frodio.com/s/'+this.stations[key].link+'/logo_small.png',
+          'error': 'onerror="if (this.src.search(/\.png$/) >= 0) this.src=this.src.replace(/\.png$/, \'.gif\'); else this.parentElement.innerHTML=\'<div>\'+this.parentElement.title+\'</div>\';"'
         });
       }
     }

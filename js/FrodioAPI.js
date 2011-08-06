@@ -92,24 +92,6 @@ FrodioAPI.prototype.getStations = function (forceUpdate, callback) {
           this.stations[key].name = json[key].like.text.replace(re, "$1");
           this.stations[key].link = json[key].link.replace(/^http:\/\/(.*)\.frodio\.com.*/, "$1");
           this.stations[key].removed = false;
-          //this.stations[key].fav = false;
-          // get small logo
-          this.ajax(this.protocol + this.host + '/s/' + this.stations[key].link + '/logo_small.png', {'opt':{'key':key, 'img':'png'} }, function (xhr, opt) {
-            if (xhr.status == 200) {
-              this.stations[opt.key].img = opt.img;
-              this.hasNewLogo = true;
-            } else {
-              this.ajax(this.protocol + this.host + '/s/' + this.stations[opt.key].link + '/logo_small.gif', {'opt':{'key':opt.key, 'img':'gif'} }, function (xhr, opt) {
-                if (xhr.status == 200) {
-                  this.stations[opt.key].img = opt.img;
-                } else {
-                  this.stations[opt.key].img = null;
-                }
-                this.hasNewLogo = true;
-              });
-            }
-          });
-          // end get small logo
         }
         this.getInfo(key, json[key], forceUpdate);
       }
@@ -118,7 +100,6 @@ FrodioAPI.prototype.getStations = function (forceUpdate, callback) {
       for (var key in this.stations) {
         if (!temp[key]) {
           this.stations[key].removed = true;
-          //if (this.order.indexOf(key-0) >= 0) this.order.splice(this.order.indexOf(key-0), 1);
           this.hasNew = true;
         } else {
           this.order.push(key-0);
