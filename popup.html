@@ -2,37 +2,40 @@
 <html>
   <head>
     <meta charset="utf-8">
-    <link rel="stylesheet" type="text/css" charset="utf-8" href="css/design.css"/>
-    <script type="text/javascript" charset="utf-8" src="js/lib/tmpl.js"></script>
-    <script type="text/javascript" charset="utf-8" src="js/lib/FPkeyhook.js"></script>
-    <script type="text/javascript" charset="utf-8" src="js/popup.js"></script>
+    <link rel="stylesheet/less" href="assets/css/style.less"/>
+    <script src="assets/js/lib/less-min.js"></script>
+    <script src="assets/js/lib/jquery-min.js"></script>
+    <script src="assets/js/lib/underscore-min.js"></script>
+    <script src="assets/js/lib/backbone-min.js"></script>
+    <script src="app/popup.js"></script>
+
     <title>Frodio Player</title>
 
-    <script type="text/html" id="last_station">
+    <script type="text/template" id="last_station_template">
       <div class="item last" <%=events%>>
         <%= chrome.i18n.getMessage('random') %>
         <span id="random_station"><%= chrome.i18n.getMessage('random_text', count+"") %></span>
       </div>
     </script>
 
-    <script type="text/html" id="station">
-      <div class="item" <%=events%>>
-        <a class="link" href="http://<%=link%>.frodio.com/" target="_blank" title="<%= chrome.i18n.getMessage('goto_station') %>"></a>
-        <a class="like <%=active%>" id="fav_station_<%=link%>" title="<%= chrome.i18n.getMessage(active ? 'unlike_station' : 'like_station') %>"></a>
-        <%=title%>
-        <span id="station_<%=link%>"><%=track%></span>
-      </div>
+    <script type="text/template" id="station_template">
+        <div class="item">
+            <a class="link" href="<%= station.url %>" target="_blank"></a>
+            <a class="like"></a>
+            <%= station.title %>
+            <span></span>
+        </div>
     </script>
 
-    <script type="text/html" id="table_station">
+    <script type="text/template" id="table_station_template">
       <div class="item table <%=class%>" <%=events%> title="<%=title%><%= track ? '\n'+track : '' %>" id="t_station_<%=link%>">
         <img src="<%=img%>" width="62" height="25" <%=error%> />
       </div>
     </script>
 
-    <script type="text/html" id="options">
+    <script type="text/template" id="options_template">
       <div id="player_options">
-        <a id="to_fav" class="<%=active%>" <%=like_events%> title="<%= chrome.i18n.getMessage(active ? 'unlike' : 'like') %>">
+        <a id="to_fav" class="<%=active%>"  title="<%= chrome.i18n.getMessage(active ? 'unlike' : 'like') %>">
         </a>
         <a id="share_t" href="<%=share_t%>" target="_blank" title="<%= chrome.i18n.getMessage('share', 'twitter') %>">
         </a>
@@ -45,14 +48,14 @@
       </div>
     </script>
 
-    <script type="text/html" id="player_inner">
+    <script type="text/template" id="player_content_template">
       <div id="player_station">
-        <a href="http://<%=link%>.frodio.com/" target="_blank" title="<%=title%>"><%=title%></a>
+        <a href="<%=link%>" target="_blank" title="<%=title%>"><%=title%></a>
       </div>
       <div id="player_info">
         <div id="player_links">
           <a <%=track_link%> target="_blank" id="player_pic" title="<%= track_link ? chrome.i18n.getMessage('goto_track') : '' %>" >
-            <img src="<%=track_pic%>" width="35" height="35" alt="" <%=events%> />
+            <img src="<%=track_pic%>" width="35" height="35" alt="">
           </a>
           <%=options%>
         </div>
@@ -61,59 +64,59 @@
       </div>
     </script>
 
-    <script type="text/html" id="body_inner">
-      <div id="player">
-        <div id="player_tools">
-          <div id="player_button_border" class="border">
-            <a id="player_button" class="<%=played%>"></a>
-          </div>
-          <div id="player_volume" class="border">
-            <input type="range" min="0.0" max="1.01" value="<%=volume%>" step="0.01" id="player_volume_range" list="values"/>
-            <datalist id="values">
-              <option value="0">
-              <option value="0.25">
-              <option value="0.5">
-              <option value="0.75">
-              <option value="1">
-            </datalist>
-          </div>
-        </div>
-        <div id="player_content"></div>
-      </div>
-      <div id="stations_container">
-        <div id="stations">
-          <div id="stations_inner" class="stations"> </div>
-        </div>
-        <div id="scroll"><div id="scroll_inner"></div></div>
-      </div>
-      <div id="menu">
-        <div id="sort" class="menu">
-          <div id="sort_4" class="<%=active_6%>" title="<%= chrome.i18n.getMessage('sort_by_fav') %>"></div>
-          <div id="sort_3" class="<%=active_3%>" title="<%= chrome.i18n.getMessage('sort_by_order') %>"></div>
-          <div id="sort_2" class="<%=active_2%>" title="<%= chrome.i18n.getMessage('sort_by_abc') %>"></div>
-          <div id="sort_1" class="<%=active_1%>" title="<%= chrome.i18n.getMessage('sort_by_popular') %>"></div>
-        </div>
-        <div id="view" class="menu">
-          <div id="view_1" class="<%=active_5%>" title="<%= chrome.i18n.getMessage('view_like_table') %>"></div>
-          <div id="view_0" class="<%=active_4%>" title="<%= chrome.i18n.getMessage('view_like_list') %>"></div>
-        </div>
-      </div>
-    </script>
-
-    <script type="text/html" id="body">
+    <script type="text/template" id="body_template">
       <header>
         <a href="http://frodio.com/" target="_blank" title="<%= chrome.i18n.getMessage('goto_site', 'Frodio.com') %>">
           Frodio - Social Radio System
         </a>
-        <!--<a href="" target="_blank">#</a>-->
+        <a href="" target="_blank">#</a>
       </header>
       <div id="content">
-        <%=body_inner%> 
+          <div id="player">
+          </div>
+          <div id="stations_container">
+            <div id="stations">
+              <div id="stations_wrapper"></div>
+            </div>
+            <div id="scroll"><div id="scroll_inner"></div></div>
+          </div>
+          <div id="menu">
+            <div id="sort" class="menu">
+              <div id="sort_1" title="<%= chrome.i18n.getMessage('sort_by_fav') %>"></div>
+              <div id="sort_2" title="<%= chrome.i18n.getMessage('sort_by_order') %>"></div>
+              <div id="sort_3" title="<%= chrome.i18n.getMessage('sort_by_abc') %>"></div>
+              <div id="sort_4" title="<%= chrome.i18n.getMessage('sort_by_popular') %>"></div>
+            </div>
+            <div id="view" class="menu">
+              <div id="view_1" title="<%= chrome.i18n.getMessage('view_like_table') %>"></div>
+              <div id="view_2" title="<%= chrome.i18n.getMessage('view_like_list') %>"></div>
+            </div>
+          </div>
       </div>
     </script>
-    
+
+    <script type="text/template" id="player_template">
+            <div id="player_tools">
+              <div id="player_button_border" class="border">
+                <a id="player_button" class="<%=paused%>"></a>
+              </div>
+              <div id="player_volume" class="border">
+                <input type="range" min="0.0" max="1.01" value="<%=volume%>" step="0.01" id="player_volume_range" list="values"/>
+                <datalist id="values">
+                  <option value="0">
+                  <option value="0.25">
+                  <option value="0.5">
+                  <option value="0.75">
+                  <option value="1">
+                </datalist>
+              </div>
+            </div>
+            <div id="player_content"></div>
+    </script>
+
   </head>
-  <body onload="popupOnLoad()">
+  <body>
     Requires JavaScript and Flash Player
+    <a href="#" target="_blank">###</a>
   </body>
 </html>

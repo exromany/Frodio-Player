@@ -1,0 +1,65 @@
+@font: Arail, sans-serif;
+@backcolor: #f1f5f6;
+@fontcolor: #505050;
+@darkfontcolor: #595a5c;
+@fontsize: 12px;
+@width: 322px;
+
+.gradient (@color, @shift: #111111) {
+    background: -webkit-gradient(
+        linear,
+        left top,
+        left bottom,
+        from(@color - @shift),
+        to(@color + @shift)
+    );
+}
+
+.text-shadow (@color: white, @x: 0, @y: 1px, @blur: 1px) {
+    text-shadow: @arguments;
+}
+
+.box-shadow (@x: 0, @y: 0, @blur: 1px, @size: 0, @color: white) {
+    box-shadow: @arguments;
+}
+
+.radius (@lt: 3px, @rt: 3px, @rb: 3px, @lb: 3px) {
+    border-radius: @arguments;
+}
+
+.radius-all (@r: 3px) {
+    .radius(@r, @r, @r, @r);
+}
+
+.radius-top (@r: 3px) {
+    .radius(@r, @r, 0, 0);
+}
+
+body {
+    background: @backcolor;
+    color: @fontcolor;
+    font-family: @font;
+    margin: 0;
+    width: @width;
+    .text-shadow;
+    padding: 0;
+}
+
+a {
+    text-decoration: none;
+    text-decoration: underline;
+}
+
+header {
+    .gradient(#d2d5d6, #010101);
+    .radius-top(2px);
+    .box-shadow(0, 1px);
+    text-align: center;
+    margin: 0px;
+    padding: 4px 0;
+
+    a {
+        color: @darkfontcolor;
+        font-weight: bold;
+    }
+}

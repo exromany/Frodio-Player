@@ -1,30 +1,29 @@
 {
   "name": "Frodio Player",
-  "version": "2.1.0",
+  "version": "3.0.0",
   "description": "__MSG_desc__",
   "default_locale": "en",
   "icons": {
-    "16": "images/icon_16.png",
-    "48": "images/icon_48.png",
-    "128": "images/icon_128.png"
+    "16": "assets/images/icon_16.png",
+    "48": "assets/images/icon_48.png",
+    "128": "assets/images/icon_128.png"
   },
   "background_page": "background.html",
   "options_page": "options.html",
   "browser_action": {
-    "default_icon": "images/icon_16.png",
+    "default_icon": "assets/images/icon_16.png",
     "popup": "popup.html",
     "default_title": "Frodio Player"
   },
   "permissions": [
-    "cookies",
     "notifications",
-    "http://*.frodio.com/",
+    "http://api.frodio.com/",
     "http://frodio.com/"
   ],
   "content_scripts": [
     {
       "matches": [ "*://*/*" ],
-      "js": [ "js/lib/FPkeyhook.js" ]
+      "js": [ "assets/js/fpKeyHook.js" ]
     }
   ]
 }

@@ -1,4 +1,4 @@
-function FP_setHook(object) {
+function fpSetHook(object) {
   object.addEventListener('keydown', function(e) { 
     if (!e) e = window.event;
     var key = {
@@ -12,4 +12,4 @@ function FP_setHook(object) {
       chrome.extension.sendRequest({'key': key});
   });
 }
-FP_setHook(document);
+fpSetHook(document);

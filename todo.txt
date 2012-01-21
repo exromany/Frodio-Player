@@ -1,6 +1,9 @@
 todo:
+ - support frodio.API
+ - support audio tag
+ - stopped on video watching
+ - build with backbone.js, less, jQuery or Zepto
+ - при простое / проигрывании выгружать ненужное в localStore
+ - перехватывать ошибки типа GET http://frod.io:8000/pig 404 (File Not Found)
 
 features:
-  + notifications
-  + favorite stations
-  + keyboard shortcuts
