@@ -1,5 +1,6 @@
 $(function() {
 
+    // дефолтные параметры обращения к серверу
     $.ajaxSetup({
         dataType: 'json',
         url: 'http://api.frodio.com',
@@ -10,6 +11,7 @@ $(function() {
             options.url = $.ajaxSettings.url
                 + (options.url.match(/^\//) ? '' : '/') + options.url;
         }
+        var success = options.success;
         options.success = function(json, status, xhr) {
             if (json.error) {
                 console.log(json.error);
@@ -21,8 +23,27 @@ $(function() {
                     console.log('проверьте параметры запроса');
                 }
             }
-            originalOptions.success.call(options.context, json, status, xhr);
+            if (success) {
+                success.call(options.context, json, status, xhr);
+            }
         }
+    });
+
+    window.Track = Backbone.Model.extend({
+
+        initialize: function() {
+            this.bind('change:liked', this.like, this);
+        },
+
+        like: function() {
+            if (this.previous('liked') && this.previous('id') == this.get('id'))
+                $.ajax({
+                    url: '/like',
+                    data: {track_id: this.previous('id')},
+                    type: 'POST',
+                });
+        },
+
     });
 
     window.Station = Backbone.Model.extend({
@@ -31,32 +52,41 @@ $(function() {
             name: 'station',
         },
 
-        ajax: function(params) {
-            params.url = '/like';
-            params.context = this;
-            params.data = {station_id: this.get('id')};
-            params.success = function(json) {
-                if (json.like) {
-                    this.set({like: json.like});
-                } else if (json.ok) {
-                    //. знак сменён. проверить нужен ли он
-                }
+        initialize: function() {
+            this.track = new Track;
+            this.bind('change:liked', this.like, this);
+        },
+
+        like: function() {
+            if (this.previous('liked')) {
+                $.ajax({
+                    url: '/like',
+                    data: {station_id: this.id},
+                    type: 'POST',
+                    context: this,
+                });
             }
-            $.ajax(params);
         },
 
-        getLike: function() {
-            this.ajax({});
-        },
-
-        setLike: function() {
-            this.ajax({
-                type: 'POST',
+        onair: function() {
+            $.ajax({
+                url: '/onair',
+                data: {cid: this.id},
+                context: this,
+                success: function(json) {
+                    if (json.onair) {
+                        this.track.set(json.onair[this.id]);
+                    }
+                },
             });
         },
 
         select: function() {
-            player.set({current: this.get('id')});
+            player.set({current: this.id});
+        },
+
+        destroy: function() {
+            this = null;
         },
 
     });
@@ -69,36 +99,35 @@ $(function() {
             this.stations();
         },
 
-        stations: function() {
-            $.ajax({
-                url: '/stations',
-                data: 'ext=1',
-                context: this,
-                success: function(json) {
-                    for(var i in json.stations) {
-                        var st = this.get(json.stations[i].id)
-                        if (!st) {
-                            this.add(json.stations[i]);
-                        } else {
-                            st.set(json.stations[i]);
-                        }
+        ajax: function(params) {
+            params.context = this;
+            params.success = function(json) {
+                for (var i in json.stations) {
+                    if (st = this.get(json.stations[i].id)) {
+                        st.set(json.stations[i]);
+                    } else {
+                        this.add(json.stations[i]);
                     }
-                },
+                }
+                for (var i in json.onair) {
+                    if (st = this.get(i)) {
+                        st.track.set(json.onair[i]);
+                    }// else this.reset;
+                }
+            }
+            $.ajax(params);
+        },
+
+        stations: function(favorite) {
+            this.ajax({
+                url: '/stations' + (favorite ? '/favorite' : ''),
+                data: {ext: 1},
             });
         },
 
         onair: function() {
-            $.ajax({
+            this.ajax({
                 url: '/onair',
-                context: this,
-                success: function(json) {
-                    for (var i in json.onair) {
-                        var st = this.get(i);
-                        if (st) {
-                            st.set({onair: json.onair[i]});
-                        }// else this.reset();
-                    }
-                }
             });
         },
 
@@ -141,7 +170,6 @@ $(function() {
                     this.set(json.user);
                 } else if (json.notify) {
                     // изменение скроблинга прошло на ура
-                    // надо изменить this.set({'notify':{}});
                 } else if (json.logout) {
                     this.unset('session');
                 }
@@ -206,9 +234,6 @@ $(function() {
         SORT_ABC: 1,
         SORT_ORDER: 2,
 
-        user: new UserModel,
-        stations: new StationList,
-
         defaults: {
             volume: 1,
             paused: true,
@@ -219,6 +244,8 @@ $(function() {
         },
 
         initialize: function() {
+            this.user = new UserModel;
+            this.stations = new StationList;
             this.bind('change:current', this.restart, this);
             this.stations.bind('add', this.setDefault, this);
         },
@@ -259,7 +286,11 @@ $(function() {
         },
 
         current: function() {
-            return this.stations.get(this.get('current'));
+            var st = this.stations.get(this.get('current'));
+            if (!st) {
+                st = this.stations.models[0];
+            }
+            return st;
         },
 
         setDefault: function() {
@@ -304,10 +335,13 @@ $(function() {
             if (player.get('paused')) {
                 this.el.empty();
             } else {
-                this.el.html(this.fladio({
-                    volume: player.get('volume'),
-                    stream: player.current().get('stream_mp3'),
-                }));
+                if (player.current()) {
+                    this.el.html(this.fladio({
+                        volume: player.get('volume'),
+                        stream: player.current().get('stream_mp3'),
+                        // ToDo: play the AAC stream
+                    }));
+                }
             }
         },
 
