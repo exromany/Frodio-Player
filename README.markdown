@@ -1,3 +1,5 @@
+# The project is out of date and no longer being developed
+
 # Frodio Player
 
 An extension for listening to internet radio from Frodio.com \*
